@@ -68,7 +68,7 @@ namespace HijackOverlay.Render
             BufferBuilder bufferBuilder = new BufferBuilder(PrimitiveType.Triangles, VertexModes.PositionColor, shader);
             shader.Uniform1F("u_radius", radius);
             shader.Uniform2F("u_size", width, height);
-            shader.Uniform2F("u_position", x, y);
+            shader.Uniform2F("u_position", x + Overlay.X, y + Overlay.Y);
             BufferColorRect(bufferBuilder, x, y, width, height, color00, color01, color10, color11);
             End(bufferBuilder);
         }
@@ -96,7 +96,7 @@ namespace HijackOverlay.Render
             shader.Uniform1F("u_radius", radius);
             shader.Uniform1F("u_thickness", thickness);
             shader.Uniform2F("u_size", width, height);
-            shader.Uniform2F("u_position", x, y);
+            shader.Uniform2F("u_position", x + Overlay.X, y + Overlay.Y);
             BufferColorRect(bufferBuilder, x, y, width, height, color00, color01, color10, color11);
             End(bufferBuilder);
         }

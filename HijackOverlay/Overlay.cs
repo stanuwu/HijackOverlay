@@ -24,6 +24,8 @@ namespace HijackOverlay
             Init(className, windowName);
         }
 
+        public static int X { get; private set; }
+        public static int Y { get; private set; }
         public static int Width { get; private set; }
         public static int Height { get; private set; }
         private IntPtr WindowHandle { get; set; }
@@ -96,6 +98,8 @@ namespace HijackOverlay
         public void StartDraw(int x, int y, int width, int height)
         {
             Wgl.MakeCurrent(DeviceContext, GlContext);
+            X = x;
+            Y = y;
             Width = width;
             Height = height;
             Gl.Viewport(x, y, width, height);
