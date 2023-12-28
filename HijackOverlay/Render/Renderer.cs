@@ -56,6 +56,24 @@ namespace HijackOverlay.Render
             Gl.Scissor((int)x, (int)y, (int)width, (int)height);
         }
 
+        public static void DrawRoundedTextureRect(float x, float y, float width, float height, float radius, GlTexture texture)
+        {
+            SetBlend();
+            var shader = ShaderManager.Instance.RoundedPositionTextureShader;
+            BufferBuilder bufferBuilder = new BufferBuilder(PrimitiveType.Triangles, VertexModes.PositionTexture, shader);
+            bufferBuilder.SetTexture(texture.Id);
+            shader.Uniform1F("u_radius", radius);
+            shader.Uniform2F("u_size", width, height);
+            shader.Uniform2F("u_position", x + Overlay.X, y + Overlay.Y);
+            BufferTextureRect(bufferBuilder, x, y, width, height);
+            End(bufferBuilder);
+        }
+
+        public static void DrawTextureCircle(float x, float y, float radius, GlTexture texture)
+        {
+            DrawRoundedTextureRect(x, y, radius, radius, radius/2 + 4, texture);
+        }
+
         public static void DrawRoundedColorRect(float x, float y, float width, float height, float radius, Color color)
         {
             DrawRoundedColorRect(x, y, width, height, radius, color, color, color, color);

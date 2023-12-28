@@ -9,6 +9,7 @@
             PositionTextureShader = new GlShader(Shaders.PositionTextureVertex, Shaders.PositionTextureFragment);
             RoundedPositionColorShader = new GlShader(Shaders.PositionColorVertex, Shaders.RoundedPositionColorFragment);
             RoundedOutlinePositionColorShader = new GlShader(Shaders.PositionColorVertex, Shaders.RoundedOutlinePositionColorFragment);
+            RoundedPositionTextureShader = new GlShader(Shaders.PositionTextureVertex, Shaders.RoundedPositionTextureFragment);
         }
 
         public static ShaderManager Instance { get; } = new();
@@ -18,6 +19,7 @@
         public GlShader PositionTextureShader { get; }
         public GlShader RoundedPositionColorShader { get; }
         public GlShader RoundedOutlinePositionColorShader { get; }
+        public GlShader RoundedPositionTextureShader { get; }
 
         public void Delete()
         {
@@ -26,6 +28,7 @@
             PositionTextureShader.Delete();
             RoundedPositionColorShader.Delete();
             RoundedOutlinePositionColorShader.Delete();
+            RoundedPositionTextureShader.Delete();
         }
     }
 }
