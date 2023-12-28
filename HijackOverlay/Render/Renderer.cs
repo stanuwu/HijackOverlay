@@ -280,7 +280,7 @@ namespace HijackOverlay.Render
             }
         }
 
-        public static void BufferColorRectOutline(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color)
+        public static void BufferOutlineColorRect(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color)
         {
             var x2 = x + width;
             var y2 = y + height;
@@ -290,7 +290,7 @@ namespace HijackOverlay.Render
             BufferColorLine(bufferBuilder, x, y2, x2, y2, color);
         }
 
-        public static void BufferColorRectOutline(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color00, Color color01,
+        public static void BufferOutlineColorRect(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color00, Color color01,
             Color color10, Color color11)
         {
             var x2 = x + width;
