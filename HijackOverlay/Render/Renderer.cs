@@ -56,6 +56,61 @@ namespace HijackOverlay.Render
             Gl.Scissor((int)x, (int)y, (int)width, (int)height);
         }
 
+        public static void DrawRoundedColorRect(float x, float y, float width, float height, float radius, Color color)
+        {
+            DrawRoundedColorRect(x, y, width, height, radius, color, color, color, color);
+        }
+        
+        public static void DrawRoundedColorRect(float x, float y, float width, float height, float radius, Color color00, Color color01, Color color10, Color color11)
+        {
+            SetBlend();
+            var shader = ShaderManager.Instance.RoundedPositionColorShader;
+            BufferBuilder bufferBuilder = new BufferBuilder(PrimitiveType.Triangles, VertexModes.PositionColor, shader);
+            shader.Uniform1F("u_radius", radius);
+            shader.Uniform2F("u_size", width, height);
+            shader.Uniform2F("u_position", x, y);
+            BufferColorRect(bufferBuilder, x, y, width, height, color00, color01, color10, color11);
+            End(bufferBuilder);
+        }
+        
+        public static void DrawColorCircle(float x, float y, float radius, Color color)
+        {
+            DrawColorCircle(x, y, radius, color, color, color, color);
+        }
+        
+        public static void DrawColorCircle(float x, float y, float radius, Color color00, Color color01, Color color10, Color color11)
+        {
+            DrawRoundedColorRect(x, y, radius, radius, radius/2 + 4, color00, color01, color10, color11);
+        }
+        
+        public static void DrawRoundedOutlineColorRect(float x, float y, float width, float height, float radius, float thickness, Color color)
+        {
+            DrawRoundedOutlineColorRect(x, y, width, height, radius, thickness, color, color, color, color);
+        }
+        
+        public static void DrawRoundedOutlineColorRect(float x, float y, float width, float height, float radius, float thickness, Color color00, Color color01, Color color10, Color color11)
+        {
+            SetBlend();
+            var shader = ShaderManager.Instance.RoundedOutlinePositionColorShader;
+            BufferBuilder bufferBuilder = new BufferBuilder(PrimitiveType.Triangles, VertexModes.PositionColor, shader);
+            shader.Uniform1F("u_radius", radius);
+            shader.Uniform1F("u_thickness", thickness);
+            shader.Uniform2F("u_size", width, height);
+            shader.Uniform2F("u_position", x, y);
+            BufferColorRect(bufferBuilder, x, y, width, height, color00, color01, color10, color11);
+            End(bufferBuilder);
+        }
+        
+        public static void DrawOutlineColorCircle(float x, float y, float radius, float thickness, Color color)
+        {
+            DrawOutlineColorCircle(x, y, radius, thickness, color, color, color, color);
+        }
+        
+        public static void DrawOutlineColorCircle(float x, float y, float radius, float thickness, Color color00, Color color01, Color color10, Color color11)
+        {
+            DrawRoundedOutlineColorRect(x, y, radius, radius, radius/2 + 4, thickness, color00, color01, color10, color11);
+        }
+
         public static void BufferColorRect(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color00, Color color01,
             Color color10,
             Color color11)
@@ -82,17 +137,16 @@ namespace HijackOverlay.Render
             bufferBuilder.Vert(x, y2).Color(color).End();
         }
 
-        public static void BufferTextureRect(BufferBuilder bufferBuilder, float x, float y, float width, float height, Color color00, Color color01,
-            Color color10, Color color11)
+        public static void BufferTextureRect(BufferBuilder bufferBuilder, float x, float y, float width, float height)
         {
             var x2 = x + width;
             var y2 = y + height;
-            bufferBuilder.Vert(x, y2).Color(color00).UV(0, 0).End();
-            bufferBuilder.Vert(x, y).Color(color01).UV(0, 1).End();
-            bufferBuilder.Vert(x2, y).Color(color11).UV(1, 1).End();
-            bufferBuilder.Vert(x2, y).Color(color11).UV(1, 1).End();
-            bufferBuilder.Vert(x2, y2).Color(color10).UV(1, 0).End();
-            bufferBuilder.Vert(x, y2).Color(color00).UV(0, 0).End();
+            bufferBuilder.Vert(x, y2).UV(0, 0).End();
+            bufferBuilder.Vert(x, y).UV(0, 1).End();
+            bufferBuilder.Vert(x2, y).UV(1, 1).End();
+            bufferBuilder.Vert(x2, y).UV(1, 1).End();
+            bufferBuilder.Vert(x2, y2).UV(1, 0).End();
+            bufferBuilder.Vert(x, y2).UV(0, 0).End();
         }
 
         public static void BufferTextureUvRect(BufferBuilder bufferBuilder, float x, float y, float width, float height, float u, float v, float u2, float v2)
