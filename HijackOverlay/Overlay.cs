@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using GameOverlay.Windows;
 using HijackOverlay.Render;
 using HijackOverlay.Render.Buffer;
 using HijackOverlay.Render.Shader;
@@ -32,6 +33,7 @@ namespace HijackOverlay
         private IntPtr DeviceContext { get; set; }
         private IntPtr GlContext { get; set; }
         private bool WillClose { get; set; }
+        private OverlayWindow? OverlayWindow { get; set; }
 
         public void Dispose()
         {
@@ -42,6 +44,7 @@ namespace HijackOverlay
             DeviceContext = default;
             GlContext = default;
             WindowHandle = default;
+            OverlayWindow?.Dispose();
         }
 
         private bool Handler(CtrlType sig)
@@ -67,22 +70,37 @@ namespace HijackOverlay
             _handler += Handler;
             Kernel32.SetConsoleCtrlHandler(_handler, true);
 
-            // Hijack Overlay
-            WindowHandle = User32.FindWindowA(className, windowName);
-            if (WindowHandle == IntPtr.Zero) throw new NoOverlayException();
-            var info = User32.GetWindowLongA(WindowHandle, -20);
-            User32.SetWindowLongA(WindowHandle, -20, info | 0x20);
-            var margins = new Margins
+            // Hijack or Create Overlay
+            if (className == "Create" && windowName == "Create")
             {
-                Left = -1,
-                Right = -1,
-                Top = -1,
-                Bottom = -1
-            };
-            Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
-            User32.SetLayeredWindowAttributes(WindowHandle, 0x000000, 0xFF, 0x02);
-            User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
-            User32.ShowWindow(WindowHandle, 5);
+                var overlay = new OverlayWindow();
+                overlay.Width = Width;
+                overlay.Height = Height;
+                overlay.Create();
+                overlay.Show();
+                WindowHandle = overlay.Handle;
+                OverlayWindow = overlay;
+                User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
+            }
+            else
+            {
+                WindowHandle = User32.FindWindowA(className, windowName);
+                if (WindowHandle == IntPtr.Zero) throw new NoOverlayException();
+                var info = User32.GetWindowLongA(WindowHandle, -20);
+                User32.SetWindowLongA(WindowHandle, -20, info | 0x20);
+                var margins = new Margins
+                {
+                    Left = -1,
+                    Right = -1,
+                    Top = -1,
+                    Bottom = -1
+                };
+                Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
+                User32.SetLayeredWindowAttributes(WindowHandle, 0x000000, 0xFF, 0x02);
+                User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
+                User32.ShowWindow(WindowHandle, 5);
+            }
+            
 
             Gl.Initialize();
             DeviceContext = User32.GetDC(WindowHandle);
