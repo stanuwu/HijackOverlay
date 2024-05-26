@@ -80,6 +80,7 @@ namespace HijackOverlay
                 overlay.Show();
                 WindowHandle = overlay.Handle;
                 OverlayWindow = overlay;
+                User32.SetLayeredWindowAttributes(WindowHandle, 0x000000, 0xFF, 0x02);
                 User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
             }
             else

@@ -17,9 +17,10 @@ namespace HijackOverlay.Render
             Gl.BlendFuncSeparate(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha, BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
         }
 
-        public static BufferBuilder StartPositionColorLines()
+        public static BufferBuilder StartPositionColorLines(float width = 1f)
         {
             SetBlend();
+            Gl.LineWidth(width);
             return new BufferBuilder(PrimitiveType.Lines, VertexModes.PositionColor, ShaderManager.Instance.PositionColorShader);
         }
 
