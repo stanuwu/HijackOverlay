@@ -94,7 +94,7 @@ namespace HijackOverlay
                 Bottom = -1
             };
             Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
-            User32.SetLayeredWindowAttributes(WindowHandle, 0x00000000, 0xFF, 0x02);
+            User32.SetLayeredWindowAttributes(WindowHandle, 0x00000000, 0xFF, 0x01 | 0x02);
             User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
             User32.ShowWindow(WindowHandle, 5);
 
