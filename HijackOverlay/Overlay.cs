@@ -78,40 +78,25 @@ namespace HijackOverlay
                 overlay.Height = Height;
                 overlay.Create();
                 WindowHandle = overlay.Handle;
-                if (WindowHandle == IntPtr.Zero) throw new NoOverlayException();
-                var info = User32.GetWindowLongA(WindowHandle, -20);
-                User32.SetWindowLongA(WindowHandle, -20, info | 0x20);
-                var margins = new Margins
-                {
-                    Left = -1,
-                    Right = -1,
-                    Top = -1,
-                    Bottom = -1
-                };
-                Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
-                User32.SetLayeredWindowAttributes(WindowHandle, 0x000000, 0xFF, 0x02);
-                User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
-                User32.ShowWindow(WindowHandle, 5);
             }
             else
             {
                 WindowHandle = User32.FindWindowA(className, windowName);
-                if (WindowHandle == IntPtr.Zero) throw new NoOverlayException();
-                var info = User32.GetWindowLongA(WindowHandle, -20);
-                User32.SetWindowLongA(WindowHandle, -20, info | 0x20);
-                var margins = new Margins
-                {
-                    Left = -1,
-                    Right = -1,
-                    Top = -1,
-                    Bottom = -1
-                };
-                Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
-                User32.SetLayeredWindowAttributes(WindowHandle, 0x000000, 0xFF, 0x02);
-                User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
-                User32.ShowWindow(WindowHandle, 5);
             }
-            
+            if (WindowHandle == IntPtr.Zero) throw new NoOverlayException();
+            var info = User32.GetWindowLongA(WindowHandle, -20);
+            User32.SetWindowLongA(WindowHandle, -20, info | 0x20);
+            var margins = new Margins
+            {
+                Left = -1,
+                Right = -1,
+                Top = -1,
+                Bottom = -1
+            };
+            Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
+            User32.SetLayeredWindowAttributes(WindowHandle, 0x00000000, 0xFF, 0x02);
+            User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
+            User32.ShowWindow(WindowHandle, 5);
 
             Gl.Initialize();
             DeviceContext = User32.GetDC(WindowHandle);
