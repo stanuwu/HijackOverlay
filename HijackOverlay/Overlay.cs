@@ -77,6 +77,7 @@ namespace HijackOverlay
                 overlay.Width = Width;
                 overlay.Height = Height;
                 overlay.Create();
+                overlay.Hide();
                 WindowHandle = overlay.Handle;
             }
             else
@@ -93,8 +94,8 @@ namespace HijackOverlay
                 Top = -1,
                 Bottom = -1
             };
+            User32.SetLayeredWindowAttributes(WindowHandle, 0x00000000, 0xFF, 0x02);
             Dwmapi.DwmExtendFrameIntoClientArea(WindowHandle, ref margins);
-            User32.SetLayeredWindowAttributes(WindowHandle, 0x00000000, 0xFF, 0x01 | 0x02);
             User32.SetWindowPos(WindowHandle, new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001);
             User32.ShowWindow(WindowHandle, 5);
 
